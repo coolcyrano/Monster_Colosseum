@@ -4,45 +4,28 @@ using UnityEngine;
 
 public class MultiAttack : MonoBehaviour
 {
-    public int maxTargets = 3;  // Maximum number of enemies to attack at once
-    private Unit unit;
+    public int maxTargets = 3;  // Max number of targets to attack
+    public float attackRadius = 2f;  // Radius within which enemies are detected
+    public int damagePerAttack = 10;  // Damage dealt per attack
 
     private void Start()
     {
-        unit = GetComponent<Unit>();
-
-        if (unit == null)
-        {
-            Debug.LogError("Unit component not found on " + gameObject.name);
-            return;
-        }
-
+        // Initialize MultiAttack or perform any setup needed
         Debug.Log($"MultiAttack initialized for {gameObject.name}");
-        StartCoroutine(DelayedStart()); // Ensure initialization
-    }
-
-    private IEnumerator DelayedStart()
-    {
-        yield return new WaitForSeconds(0.1f); // Small delay to ensure initialization
     }
 
     private void Update()
     {
-        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, unit.attackRange, unit.enemyLayer);
-
-        Debug.Log($"Enemies detected: {enemiesInRange.Length} for {gameObject.name}");
-
-        if (enemiesInRange.Length > 0 && Time.time >= unit.LastAttackTime + unit.attackCooldown)
-        {
-            AttackMultipleEnemies(enemiesInRange);
-            unit.LastAttackTime = Time.time;  // Reset the cooldown timer
-        }
+        AttackEnemies();
     }
 
-    private void AttackMultipleEnemies(Collider2D[] enemiesInRange)
+    private void AttackEnemies()
     {
-        int targetsAttacked = 0;
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attackRadius, LayerMask.GetMask("Enemy"));
+        Debug.Log($"Enemies detected: {enemiesInRange.Length} for {gameObject.name}");
 
+        // Make sure to limit the number of targets to attack
+        int targetsAttacked = 0;
         foreach (Collider2D enemyCollider in enemiesInRange)
         {
             if (targetsAttacked >= maxTargets)
@@ -51,19 +34,19 @@ public class MultiAttack : MonoBehaviour
             Unit enemyUnit = enemyCollider.GetComponent<Unit>();
             if (enemyUnit != null)
             {
-                unit.Attack(enemyUnit);  // Ensure this method handles each attack properly
+                // Apply damage
+                enemyUnit.TakeDamage(damagePerAttack);
+                Debug.Log($"{gameObject.name} attacked {enemyUnit.gameObject.name} for {damagePerAttack} damage.");
                 targetsAttacked++;
-                Debug.Log($"{gameObject.name} attacked {enemyUnit.gameObject.name}. Total targets attacked: {targetsAttacked}");
             }
         }
-
-        Debug.Log($"{gameObject.name} attacked {targetsAttacked} enemies.");
     }
 
     private void OnDrawGizmosSelected()
     {
+        // Visualize the attack radius in the editor
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, unit.attackRange);
+        Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
 }
 

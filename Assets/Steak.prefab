@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1412649638379644763}
   - component: {fileID: 3552983463678045682}
   - component: {fileID: 6023461569345265843}
-  - component: {fileID: 4958064077046926995}
   m_Layer: 8
   m_Name: Steak
   m_TagString: Untagged
@@ -115,6 +114,7 @@ MonoBehaviour:
     m_Bits: 256
   attackCooldown: 1
   cost: 10
+  maxTargets: 1
 --- !u!50 &1412649638379644763
 Rigidbody2D:
   serializedVersion: 4
@@ -183,16 +183,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4958064077046926995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 809094822235486612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa4972ce2ee760944b1cbf9cedb3a983, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxTargets: 3

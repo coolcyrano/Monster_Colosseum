@@ -1193,31 +1193,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3552983463678045682, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
       propertyPath: m_Size.x
-      value: 0.1
+      value: 1.5037868
       objectReference: {fileID: 0}
     - target: {fileID: 3552983463678045682, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
       propertyPath: m_Size.y
-      value: 0.1
+      value: 1.6682278
       objectReference: {fileID: 0}
     - target: {fileID: 3552983463678045682, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
       propertyPath: m_Offset.x
-      value: -0.80021936
+      value: -1.390298
       objectReference: {fileID: 0}
     - target: {fileID: 3552983463678045682, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
       propertyPath: m_Offset.y
-      value: -0.0662179
+      value: -0.6053328
       objectReference: {fileID: 0}
     - target: {fileID: 3601974509898675500, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
       propertyPath: m_RootOrder
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3601974509898675500, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.5625
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601974509898675500, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.5207498
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601974509898675500, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 52.6
+      value: 52.4437
       objectReference: {fileID: 0}
     - target: {fileID: 3601974509898675500, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -26.1
+      value: -26.0479
       objectReference: {fileID: 0}
     - target: {fileID: 3601974509898675500, guid: f3acd1c43dd22b641924597a8ed3224b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1683,6 +1691,12 @@ MonoBehaviour:
   - {fileID: 540528881}
   - {fileID: 1723554737}
   spawnDelay: 0.5
+  blueTeamLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  redTeamLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!4 &2061066526
 Transform:
   m_ObjectHideFlags: 0

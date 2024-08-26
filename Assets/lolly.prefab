@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 3378382860023634353}
   - component: {fileID: 3378382860023634354}
   - component: {fileID: 6414686068495253823}
-  - component: {fileID: -8548630928534235259}
   m_Layer: 8
   m_Name: lolly
   m_TagString: Untagged
@@ -149,9 +148,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
-  health: 125000
+  health: 125
   damage: 10
-  attackRange: 0
+  attackRange: 25
   separationDistance: 10
   avoidanceStrength: 200
   enemyLayer:
@@ -160,8 +159,9 @@ MonoBehaviour:
   allyLayer:
     serializedVersion: 2
     m_Bits: 256
-  attackCooldown: 2
-  cost: 10
+  attackCooldown: 8
+  cost: 100
+  maxTargets: 100
 --- !u!95 &6414686068495253823
 Animator:
   serializedVersion: 5
@@ -183,16 +183,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-8548630928534235259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3378382860023634364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa4972ce2ee760944b1cbf9cedb3a983, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxTargets: 3

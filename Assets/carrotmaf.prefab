@@ -103,7 +103,7 @@ MonoBehaviour:
   moveSpeed: 0.1
   health: 80
   damage: 3
-  attackRange: 60
+  attackRange: 0
   separationDistance: 12
   avoidanceStrength: 1
   enemyLayer:
@@ -114,6 +114,7 @@ MonoBehaviour:
     m_Bits: 256
   attackCooldown: 0.4
   cost: 20
+  maxTargets: 3
 --- !u!50 &5393637524520610092
 Rigidbody2D:
   serializedVersion: 4

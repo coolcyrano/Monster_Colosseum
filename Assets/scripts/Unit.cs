@@ -14,6 +14,7 @@ public class Unit : MonoBehaviour
     public LayerMask allyLayer;   // Layer of allied units
     public float attackCooldown = 1.0f;  // Cooldown duration in seconds
     public int cost = 10;
+    public int maxTargets = 3;  // Maximum number of targets to attack
 
     private float lastAttackTime;
     private Vector2 minBounds;  // Minimum screen bounds
@@ -31,6 +32,23 @@ public class Unit : MonoBehaviour
     public Animator Animator
     {
         get { return animator; }
+    }
+
+    // Initialize method to set the enemy and ally layers
+    public void Initialize(LayerMask enemyLayer, LayerMask allyLayer)
+    {
+        this.enemyLayer = enemyLayer;
+        this.allyLayer = allyLayer;
+        
+        lastAttackTime = -attackCooldown;  // Allow immediate first attack
+
+        // Calculate screen bounds
+        Camera mainCamera = Camera.main;
+        minBounds = mainCamera.ScreenToWorldPoint(new Vector2(0, 0));
+        maxBounds = mainCamera.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+
+        // Get the Animator component
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -56,14 +74,16 @@ public class Unit : MonoBehaviour
             // Calculate the distance to the closest enemy
             float distanceToEnemy = Vector2.Distance(transform.position, closestEnemy.transform.position);
 
-            // Stop moving and attack if within attack range
+            // Attack if within attack range
             if (distanceToEnemy <= attackRange)
             {
-                // Attack the enemy if the attack cooldown has passed
-                if (Time.time >= LastAttackTime + attackCooldown)
+                // Find enemies within attack range
+                Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attackRange, enemyLayer);
+
+                if (enemiesInRange.Length > 0 && Time.time >= LastAttackTime + attackCooldown)
                 {
-                    Attack(closestEnemy.GetComponent<Unit>());
-                    LastAttackTime = Time.time;  // Reset the cooldown timer
+                    AttackMultipleEnemies(enemiesInRange);
+                    LastAttackTime = Time.time;
                 }
             }
             else
@@ -82,6 +102,9 @@ public class Unit : MonoBehaviour
 
     private void MoveTowardsEnemy(GameObject closestEnemy)
     {
+        if (closestEnemy == null)
+            return;
+
         Vector2 targetDirection = (closestEnemy.transform.position - transform.position).normalized;
         Vector2 avoidanceVector = CalculateAvoidanceVector();
 
@@ -150,20 +173,42 @@ public class Unit : MonoBehaviour
             }
 
             enemyUnit.TakeDamage(damage);
-            Debug.Log($"{gameObject.name} attacked {enemyUnit.gameObject.name} for {damage} damage.");
         }
+    }
+
+    private void AttackMultipleEnemies(Collider2D[] enemiesInRange)
+    {
+        int targetsAttacked = 0;
+
+        foreach (Collider2D enemyCollider in enemiesInRange)
+        {
+            if (targetsAttacked >= maxTargets)
+                break;
+
+            Unit enemyUnit = enemyCollider.GetComponent<Unit>();
+            if (enemyUnit != null)
+            {
+                Attack(enemyUnit);  // Ensure this method handles each attack properly
+                targetsAttacked++;
+            }
+        }
+
+        Debug.Log($"{gameObject.name} attacked {targetsAttacked} enemies.");
     }
 
     public void TakeDamage(int amount)
     {
-        Debug.Log($"{gameObject.name} takes {amount} damage. Health is now {health - amount}.");
         health -= amount;
+
+        // Check if the unit's health is depleted
+        if (health <= 0)
+        {
+            DestroyUnit();
+        }
     }
 
     private void DestroyUnit()
     {
-        Debug.Log($"{gameObject.name} has been destroyed.");
-
         // Notify the EnemyManager to remove this enemy from the list
         EnemyManager enemyManager = FindObjectOfType<EnemyManager>();
         if (enemyManager != null)
@@ -171,11 +216,11 @@ public class Unit : MonoBehaviour
             enemyManager.RemoveEnemy(gameObject);
         }
 
-        // Destroy this unit's GameObject
+        // Destroy this unit's GameObject immediately
         Destroy(gameObject);
     }
 
-    public GameObject FindClosestEnemy()
+    private GameObject FindClosestEnemy()
     {
         // Only look for enemies on the specified enemy layer
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, Mathf.Infinity, enemyLayer);
@@ -205,4 +250,3 @@ public class Unit : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, separationDistance);
     }
 }
-
